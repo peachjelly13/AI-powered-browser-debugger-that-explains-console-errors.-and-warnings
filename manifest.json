@@ -1,0 +1,26 @@
+{
+    "manifest_version": 3,
+    "name": "AI Debugger",
+    "version": "1.0",
+    "description": "AI-powered browser debugger that explains console errors.",
+    "permissions": ["scripting", "storage"],
+    "host_permissions": ["<all_urls>"],
+    "background": {
+      "service_worker": "background.js"
+    },
+    "content_scripts": [
+      {
+        "matches": ["<all_urls>"],
+        "js": ["content.js"]
+      }
+    ],
+    "action": {
+      "default_popup": "popup.html",
+      "default_icon": {
+        "16": "icon.png",
+        "48": "icon.png",
+        "128": "icon.png"
+      }
+    }
+  }
+  
