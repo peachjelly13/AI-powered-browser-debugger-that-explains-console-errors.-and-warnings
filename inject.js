@@ -31,6 +31,31 @@
             method.apply(console,args);
         }
     })
+    
+//for network errors
+    const fetch_ = window.fetch;
+    window.fetch  = async function(...args){
+        try {
+            const response = await fetch_(...args);
+            if(!response.ok){
+                sendError({
+                    type:"Network Error",
+                    message:`Failed Fetch: ${error.status} ${error.stausText}`,
+                    url:args[0]
+                })
+            }
+            
+        } catch (error) {
+            sendError({
+                type:"Network Error",
+                message:`Fetch Error: ${error.message}`,
+                url:args[0]
+            });
+            throw error;
+            
+        }
+
+    };
 
 
 
