@@ -56,9 +56,30 @@
         }
 
     };
+    // capturing network errors here as well
+    const xml_ = XMLHttpRequest.prototype.open;
+    XMLHttpRequest.prototype.open = function (method, url, ...rest) {
+        this.addEventListener("error", function () {
+            sendError({
+                type: "network error ",
+                message: `XHR Error on ${method} ${url}`,
+            });
+        });
+        this.addEventListener("load", function () {
+            if (this.status >= 400) {
+                sendError({
+                    type: "network error ",
+                    message: `XHR Failed: ${this.status} ${this.statusText}`,
+                    url,
+                });
+            }
+        });
+        return xml_.apply(this, [method, url, ...rest]);
+    };
 
-
-
+    function sendError(errorData){
+        window.postMessage(errorData,"*");
+    }
 
 })();
 
